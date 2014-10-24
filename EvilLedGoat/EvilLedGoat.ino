@@ -49,62 +49,59 @@ void setup() {
 
 /*************************************************************************/
 void loop(){
-    char buffer[64];
-    size_t length = 64;
-    length = Serial.readBytes(buffer, length);   
-    if ( length > 0 )
+  char buffer[64];
+  size_t length = 64;
+  length = Serial.readBytes(buffer, length);   
+  if ( length > 0 )
+  {
+    //Check which checkbox/slider has been changed
+    switch(buffer[0])
     {
-      for(int i = 0; i < length - 2; i++){
-        int i = length-2;
-        //Check which checkbox/slider has been changed
-        switch(buffer[i])
-        {
-           case redCheckbox: 
-            redTurnedOn=buffer[i+1];
-            changeLED(redPin1, redPin2, redTurnedOn*redBrightness);
-            break;
-          case redSlider:
-            redBrightness=(float)((uint8_t)buffer[i+1])/255*100;
-            changeLED(redPin1, redPin2, redTurnedOn*redBrightness);
-            break;
+       case redCheckbox: 
+        redTurnedOn=buffer[1];
+        changeLED(redPin1, redPin2, redTurnedOn*redBrightness);
+        break;
+      case redSlider:
+        redBrightness=(float)((uint8_t)buffer[1])/255*100;
+        changeLED(redPin1, redPin2, redTurnedOn*redBrightness);
+        break;
 
-          case blueCheckbox: 
-            blueTurnedOn=buffer[i+1];
-            changeLED(bluePin1, bluePin2, blueTurnedOn*blueBrightness);
-            break;
-          case blueSlider:
-            blueBrightness=(float)((uint8_t)buffer[i+1])/255*100;
-            changeLED(bluePin1, bluePin2, blueTurnedOn*blueBrightness);
-            break;
-            
-          case greenCheckbox: 
-            greenTurnedOn=buffer[i+1];
-            changeLED(greenPin1, greenPin2, greenTurnedOn*greenBrightness);
-            break;
-          case greenSlider:
-            greenBrightness=(float)((uint8_t)buffer[i+1])/255*100;
-            changeLED(greenPin1, greenPin2, greenTurnedOn*greenBrightness);
-            break;
+      case blueCheckbox: 
+        blueTurnedOn=buffer[1];
+        changeLED(bluePin1, bluePin2, blueTurnedOn*blueBrightness);
+        break;
+      case blueSlider:
+        blueBrightness=(float)((uint8_t)buffer[1])/255*100;
+        changeLED(bluePin1, bluePin2, blueTurnedOn*blueBrightness);
+        break;
+        
+      case greenCheckbox: 
+        greenTurnedOn=buffer[1];
+        changeLED(greenPin1, greenPin2, greenTurnedOn*greenBrightness);
+        break;
+      case greenSlider:
+        greenBrightness=(float)((uint8_t)buffer[1])/255*100;
+        changeLED(greenPin1, greenPin2, greenTurnedOn*greenBrightness);
+        break;
 
-          case discoCheckbox:
-            discoMode=(uint8_t)buffer[i+1];
-            break;
-          case discoSlider:
-            discoIntensity=(uint8_t)buffer[i+1];
-            break;
-            
-          default:
-            break;
+      case discoCheckbox:
+        discoMode=(uint8_t)buffer[1];
+        break;
+      case discoSlider:
+        discoIntensity=(uint8_t)buffer[1];
+        break;
+        
+      default:
+        break;
     }
    }
-    }
-   
-   if(discoMode && discoIntensity > 0){
-     for(int i = 0; i < 10; i++){
-       SoftPWMSetPercent(random(6), random(100)*random(2));
-       delay(random(255-discoIntensity));
-     }
+ 
+ if(discoMode && discoIntensity > 0){
+   for(int i = 0; i < 10; i++){
+     SoftPWMSetPercent(random(6), random(100)*random(2));
+     delay(random(255-discoIntensity));
    }
+ }
 }
 
 void changeLED(int pin1, int pin2, int percent){
